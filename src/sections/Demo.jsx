@@ -23,6 +23,7 @@ import {
   Package,
   RotateCcw
 } from 'lucide-react'
+import { postData, ENDPOINTS } from '../config/api'
 
 // Tipos de agentes disponibles
 const agentTypes = [
@@ -175,13 +176,25 @@ export default function Demo() {
     }
 
     setIsSubmitting(true)
-    await new Promise((resolve) => setTimeout(resolve, 2000))
-    setIsSubmitting(false)
-    setIsSuccess(true)
 
-    setTimeout(() => {
-      resetDemo()
-    }, 6000)
+    try {
+      await postData(ENDPOINTS.CONFIGURACION_AGENTE, {
+        tipoAgente: selectedAgent,
+        tipoEscenario: selectedScenario,
+        canalContacto: selectedChannel,
+        numeroTelefono: phoneNumber,
+      })
+
+      setIsSuccess(true)
+
+      setTimeout(() => {
+        resetDemo()
+      }, 6000)
+    } catch (err) {
+      setError(err.message || 'Error al enviar la solicitud')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const resetDemo = () => {

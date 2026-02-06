@@ -4,6 +4,7 @@ import { Menu, X, Sparkles } from 'lucide-react'
 
 const navLinks = [
   { name: 'Servicios', href: '#servicios' },
+  { name: 'Demo', href: '#demo' },
   { name: 'Nosotros', href: '#nosotros' },
   { name: 'Contacto', href: '#contacto' },
 ]
@@ -26,7 +27,9 @@ export default function Navbar() {
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? 'glass py-3' : 'bg-transparent py-5'
+        isScrolled
+          ? 'bg-slate-950/80 backdrop-blur-xl border-b border-slate-800/50 py-3'
+          : 'bg-transparent py-5'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

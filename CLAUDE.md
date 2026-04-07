@@ -19,7 +19,7 @@ Single-page marketing website for Inndomitus (AI consulting company). Written in
 
 **Structure:**
 - `src/sections/` — Page sections rendered in order in `App.jsx`: Hero → Services → Demo → About → Contact → Footer
-- `src/components/` — Shared UI: `Navbar.jsx`, `Button.jsx`, `ServiceCard.jsx`
+- `src/components/` — Shared UI: `Navbar.jsx`, `Button.jsx`, `ServiceCard.jsx`, `TeamCarousel.jsx` (used in About)
 - `src/data/` — Static content: `services.js` (6 AI services with icons/gradients), `team.js` (7 founders + company values)
 - `src/config/api.js` — Backend base URL (`https://inndomitus-back.vercel.app`) and endpoints
 
@@ -34,3 +34,5 @@ Single-page marketing website for Inndomitus (AI consulting company). Written in
 - No authentication; purely a public frontend
 
 **ESLint note:** Unused vars are allowed if they start with an uppercase letter or underscore (configured in `eslint.config.js`).
+
+**Note:** `src/sections/ChatBot.jsx` exists but is not rendered in `App.jsx` — it appears to be work-in-progress.

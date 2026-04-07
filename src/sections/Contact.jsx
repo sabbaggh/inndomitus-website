@@ -3,6 +3,33 @@ import { motion } from 'framer-motion'
 import { Mail, MessageSquare, Send, ArrowRight, Calendar, Clock, CheckCircle, Loader2, AlertCircle } from 'lucide-react'
 import { postData, ENDPOINTS } from '../config/api'
 
+const inputClass = `
+  w-full px-4 py-3.5 rounded-xl text-white text-sm
+  placeholder-slate-500 transition-all duration-200
+  focus:outline-none
+`
+
+const features = [
+  {
+    icon: Clock,
+    label: 'Respuesta en menos de 24h',
+    color: '#38BDF8',
+    bg: 'rgba(56,189,248,0.1)',
+  },
+  {
+    icon: Calendar,
+    label: 'Reunión de descubrimiento gratuita',
+    color: '#A78BFA',
+    bg: 'rgba(167,139,250,0.1)',
+  },
+  {
+    icon: Send,
+    label: 'Propuesta detallada sin compromiso',
+    color: '#34D399',
+    bg: 'rgba(52,211,153,0.1)',
+  },
+]
+
 export default function Contact() {
   const [formData, setFormData] = useState({
     nombreCliente: '',
@@ -11,7 +38,7 @@ export default function Contact() {
     descripcion: '',
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitStatus, setSubmitStatus] = useState(null) // 'success' | 'error' | null
+  const [submitStatus, setSubmitStatus] = useState(null)
   const [errorMessage, setErrorMessage] = useState('')
 
   const handleChange = (e) => {
@@ -28,14 +55,7 @@ export default function Contact() {
     try {
       await postData(ENDPOINTS.FORMULARIO_CONTACTO, formData)
       setSubmitStatus('success')
-      setFormData({
-        nombreCliente: '',
-        nombreEmpresa: '',
-        email: '',
-        descripcion: '',
-      })
-
-      // Reset success message after 5 seconds
+      setFormData({ nombreCliente: '', nombreEmpresa: '', email: '', descripcion: '' })
       setTimeout(() => setSubmitStatus(null), 5000)
     } catch (error) {
       setSubmitStatus('error')
@@ -46,25 +66,28 @@ export default function Contact() {
   }
 
   return (
-    <section id="contacto" className="relative py-24 lg:py-32 overflow-hidden">
+    <section id="contacto" className="relative py-28 lg:py-36 overflow-hidden">
       {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-violet-950/20 to-slate-950" />
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-violet-950/12 to-slate-950" />
 
-      {/* Decorative Gradient Orbs */}
+      {/* Orbs */}
       <motion.div
-        animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
+        animate={{ scale: [1, 1.15, 1], opacity: [0.08, 0.18, 0.08] }}
         transition={{ duration: 8, repeat: Infinity }}
-        className="absolute top-1/3 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl"
+        className="absolute top-1/3 left-1/4 w-96 h-96 rounded-full blur-3xl"
+        style={{ background: 'rgba(56,189,248,0.15)' }}
       />
       <motion.div
-        animate={{ scale: [1.2, 1, 1.2], opacity: [0.2, 0.4, 0.2] }}
+        animate={{ scale: [1.15, 1, 1.15], opacity: [0.06, 0.14, 0.06] }}
         transition={{ duration: 10, repeat: Infinity }}
-        className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-violet-500/10 rounded-full blur-3xl"
+        className="absolute bottom-1/3 right-1/4 w-96 h-96 rounded-full blur-3xl"
+        style={{ background: 'rgba(167,139,250,0.15)' }}
       />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-          {/* Left Content */}
+        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+
+          {/* Left */}
           <div>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -81,7 +104,7 @@ export default function Contact() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
-              className="text-4xl sm:text-5xl lg:text-6xl font-bold font-display mb-6"
+              className="text-4xl sm:text-5xl lg:text-6xl font-bold font-display mb-6 tracking-tight leading-[1.1]"
             >
               <span className="text-white">¿Listo para</span>
               <br />
@@ -93,13 +116,12 @@ export default function Contact() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
-              className="text-slate-400 text-lg mb-8 max-w-lg"
+              className="text-slate-400 text-lg mb-10 max-w-lg leading-relaxed"
             >
               Cuéntanos sobre tu proyecto. Te responderemos en menos de 24 horas
               con una propuesta personalizada.
             </motion.p>
 
-            {/* Features */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -107,69 +129,104 @@ export default function Contact() {
               transition={{ delay: 0.3 }}
               className="space-y-4"
             >
-              <div className="flex items-center gap-3 text-slate-300">
-                <div className="w-10 h-10 rounded-xl bg-cyan-500/10 flex items-center justify-center">
-                  <Clock className="w-5 h-5 text-cyan-400" />
-                </div>
-                <span>Respuesta en menos de 24h</span>
-              </div>
-              <div className="flex items-center gap-3 text-slate-300">
-                <div className="w-10 h-10 rounded-xl bg-violet-500/10 flex items-center justify-center">
-                  <Calendar className="w-5 h-5 text-violet-400" />
-                </div>
-                <span>Reunión de descubrimiento gratuita</span>
-              </div>
-              <div className="flex items-center gap-3 text-slate-300">
-                <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center">
-                  <Send className="w-5 h-5 text-emerald-400" />
-                </div>
-                <span>Propuesta detallada sin compromiso</span>
-              </div>
+              {features.map((f, i) => {
+                const Icon = f.icon
+                return (
+                  <div key={i} className="flex items-center gap-4">
+                    <div
+                      className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0"
+                      style={{ background: f.bg }}
+                    >
+                      <Icon className="w-5 h-5" style={{ color: f.color }} />
+                    </div>
+                    <span className="text-slate-300 text-sm font-medium">{f.label}</span>
+                  </div>
+                )
+              })}
             </motion.div>
           </div>
 
-          {/* Right - Contact Form */}
+          {/* Right – Form */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="glass rounded-3xl p-8 lg:p-10"
+            className="glass rounded-3xl p-8 lg:p-10 relative overflow-hidden"
           >
+            {/* Subtle corner glow */}
+            <div
+              className="absolute -top-20 -right-20 w-48 h-48 rounded-full blur-3xl pointer-events-none"
+              style={{ background: 'rgba(56,189,248,0.06)' }}
+            />
+
             {submitStatus === 'success' ? (
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="text-center py-12"
+                className="text-center py-14"
               >
-                <div className="w-20 h-20 rounded-full bg-emerald-500/20 flex items-center justify-center mx-auto mb-6">
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: 'spring', duration: 0.5 }}
+                  className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6"
+                  style={{ background: 'rgba(52,211,153,0.15)' }}
+                >
                   <CheckCircle className="w-10 h-10 text-emerald-400" />
-                </div>
-                <h3 className="text-2xl font-bold text-white mb-2">¡Mensaje Enviado!</h3>
-                <p className="text-slate-400">
-                  Te contactaremos en menos de 24 horas.
-                </p>
+                </motion.div>
+                <h3 className="text-2xl font-bold text-white mb-2 font-display">¡Mensaje Enviado!</h3>
+                <p className="text-slate-400">Te contactaremos en menos de 24 horas.</p>
               </motion.div>
             ) : (
-              <form className="space-y-6" onSubmit={handleSubmit}>
-                <div>
-                  <label htmlFor="nombreCliente" className="block text-sm font-medium text-slate-300 mb-2">
-                    Nombre
-                  </label>
-                  <input
-                    type="text"
-                    id="nombreCliente"
-                    name="nombreCliente"
-                    value={formData.nombreCliente}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-3 rounded-xl bg-slate-900/50 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/20 transition-colors"
-                    placeholder="Tu nombre"
-                  />
+              <form className="space-y-5 relative" onSubmit={handleSubmit}>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <div>
+                    <label htmlFor="nombreCliente" className="block text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">
+                      Nombre
+                    </label>
+                    <input
+                      type="text"
+                      id="nombreCliente"
+                      name="nombreCliente"
+                      value={formData.nombreCliente}
+                      onChange={handleChange}
+                      required
+                      placeholder="Tu nombre"
+                      className={inputClass}
+                      style={{
+                        background: 'rgba(255,255,255,0.04)',
+                        border: '1px solid rgba(255,255,255,0.08)',
+                      }}
+                      onFocus={e => { e.target.style.borderColor = 'rgba(56,189,248,0.5)'; e.target.style.boxShadow = '0 0 0 3px rgba(56,189,248,0.1)' }}
+                      onBlur={e => { e.target.style.borderColor = 'rgba(255,255,255,0.08)'; e.target.style.boxShadow = 'none' }}
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="nombreEmpresa" className="block text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">
+                      Empresa
+                    </label>
+                    <input
+                      type="text"
+                      id="nombreEmpresa"
+                      name="nombreEmpresa"
+                      value={formData.nombreEmpresa}
+                      onChange={handleChange}
+                      placeholder="Tu empresa"
+                      className={inputClass}
+                      style={{
+                        background: 'rgba(255,255,255,0.04)',
+                        border: '1px solid rgba(255,255,255,0.08)',
+                      }}
+                      onFocus={e => { e.target.style.borderColor = 'rgba(56,189,248,0.5)'; e.target.style.boxShadow = '0 0 0 3px rgba(56,189,248,0.1)' }}
+                      onBlur={e => { e.target.style.borderColor = 'rgba(255,255,255,0.08)'; e.target.style.boxShadow = 'none' }}
+                    />
+                  </div>
                 </div>
 
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-slate-300 mb-2">
+                  <label htmlFor="email" className="block text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">
                     Email
                   </label>
                   <input
@@ -179,28 +236,19 @@ export default function Contact() {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 rounded-xl bg-slate-900/50 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/20 transition-colors"
                     placeholder="tu@empresa.com"
+                    className={inputClass}
+                    style={{
+                      background: 'rgba(255,255,255,0.04)',
+                      border: '1px solid rgba(255,255,255,0.08)',
+                    }}
+                    onFocus={e => { e.target.style.borderColor = 'rgba(56,189,248,0.5)'; e.target.style.boxShadow = '0 0 0 3px rgba(56,189,248,0.1)' }}
+                    onBlur={e => { e.target.style.borderColor = 'rgba(255,255,255,0.08)'; e.target.style.boxShadow = 'none' }}
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="nombreEmpresa" className="block text-sm font-medium text-slate-300 mb-2">
-                    Empresa
-                  </label>
-                  <input
-                    type="text"
-                    id="nombreEmpresa"
-                    name="nombreEmpresa"
-                    value={formData.nombreEmpresa}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 rounded-xl bg-slate-900/50 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/20 transition-colors"
-                    placeholder="Nombre de tu empresa"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="descripcion" className="block text-sm font-medium text-slate-300 mb-2">
+                  <label htmlFor="descripcion" className="block text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">
                     ¿Qué necesitas?
                   </label>
                   <textarea
@@ -210,8 +258,14 @@ export default function Contact() {
                     onChange={handleChange}
                     required
                     rows={4}
-                    className="w-full px-4 py-3 rounded-xl bg-slate-900/50 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/20 transition-colors resize-none"
-                    placeholder="Cuéntanos sobre tu proyecto o necesidad de automatización..."
+                    placeholder="Cuéntanos sobre tu proyecto..."
+                    className={`${inputClass} resize-none`}
+                    style={{
+                      background: 'rgba(255,255,255,0.04)',
+                      border: '1px solid rgba(255,255,255,0.08)',
+                    }}
+                    onFocus={e => { e.target.style.borderColor = 'rgba(56,189,248,0.5)'; e.target.style.boxShadow = '0 0 0 3px rgba(56,189,248,0.1)' }}
+                    onBlur={e => { e.target.style.borderColor = 'rgba(255,255,255,0.08)'; e.target.style.boxShadow = 'none' }}
                   />
                 </div>
 
@@ -219,7 +273,8 @@ export default function Contact() {
                   <motion.div
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="flex items-center gap-2 text-red-400 text-sm bg-red-500/10 border border-red-500/20 rounded-lg p-3"
+                    className="flex items-center gap-2 text-red-400 text-sm rounded-xl p-3"
+                    style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)' }}
                   >
                     <AlertCircle className="w-4 h-4 shrink-0" />
                     {errorMessage}
@@ -229,8 +284,13 @@ export default function Contact() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full group relative px-8 py-4 rounded-xl bg-gradient-to-r from-cyan-500 via-violet-500 to-emerald-500 text-base font-semibold text-white overflow-hidden transition-all hover:shadow-xl hover:shadow-cyan-500/20 disabled:opacity-70 disabled:cursor-not-allowed"
+                  className="w-full group relative px-8 py-4 rounded-xl text-base font-semibold text-slate-950 overflow-hidden transition-all duration-300 hover:shadow-[0_0_32px_rgba(56,189,248,0.35)] disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+                  style={{ background: 'linear-gradient(135deg, #38BDF8 0%, #0EA5E9 100%)' }}
                 >
+                  <span
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    style={{ background: 'linear-gradient(135deg, #7DD3FC 0%, #38BDF8 100%)' }}
+                  />
                   <span className="relative z-10 flex items-center justify-center gap-2">
                     {isSubmitting ? (
                       <>
@@ -245,8 +305,11 @@ export default function Contact() {
                       </>
                     )}
                   </span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-emerald-500 via-cyan-500 to-violet-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 </button>
+
+                <p className="text-center text-xs text-slate-600">
+                  Al enviar, aceptas recibir una respuesta personalizada de nuestro equipo.
+                </p>
               </form>
             )}
           </motion.div>

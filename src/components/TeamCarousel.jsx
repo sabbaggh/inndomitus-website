@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { motion, useAnimation } from 'framer-motion'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { teamMembers } from '../data/team'
 
 import juanPhoto from '../juan_alberto_calderon_sabbagh.jpeg'
@@ -111,57 +112,88 @@ export default function TeamCarousel() {
   }
 
   return (
-    <div
-      ref={containerRef}
-      className="w-full overflow-hidden cursor-grab active:cursor-grabbing select-none"
-      onPointerDown={handlePointerDown}
-      onPointerUp={handlePointerUp}
-    >
-      <motion.div className="flex" animate={controls}>
-        {slides.map((member, index) => (
-          <div
-            key={`${member.id}-${index}`}
-            className="min-w-full flex flex-col md:flex-row md:h-[520px]"
-          >
-            {/* Photo */}
-            <div className="w-full md:w-2/5 h-72 md:h-full overflow-hidden">
-              <img
-                src={photos[member.photo]}
-                alt={member.name}
-                className="w-full h-full object-cover pointer-events-none"
-                draggable={false}
-              />
-            </div>
+    <div className="relative select-none">
+      <div
+        ref={containerRef}
+        className="w-full overflow-hidden cursor-grab active:cursor-grabbing"
+        onPointerDown={handlePointerDown}
+        onPointerUp={handlePointerUp}
+      >
+        <motion.div className="flex" animate={controls}>
+          {slides.map((member, index) => (
+            <div
+              key={`${member.id}-${index}`}
+              className="min-w-full flex flex-col md:flex-row md:h-[520px]"
+            >
+              {/* Photo */}
+              <div className="w-full md:w-2/5 h-72 md:h-full overflow-hidden relative">
+                <img
+                  src={photos[member.photo]}
+                  alt={member.name}
+                  className="w-full h-full object-cover pointer-events-none"
+                  draggable={false}
+                />
+                {/* Gradient overlay on photo */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent to-slate-900/30 hidden md:block" />
+              </div>
 
-            {/* Info */}
-            <div className="flex-1 flex flex-col justify-center px-8 py-10 md:px-16 glass">
-              <p className="text-cyan-400 text-sm font-medium tracking-widest uppercase mb-3">
-                {member.role}
-              </p>
-              <h3 className="text-white font-bold font-display text-3xl md:text-4xl mb-6 leading-tight">
-                {member.name}
-              </h3>
-              <p className="text-slate-400 text-base leading-relaxed max-w-lg">
-                {member.bio}
-              </p>
+              {/* Info */}
+              <div className="flex-1 flex flex-col justify-center px-8 py-10 md:px-16 glass">
+                <p
+                  className="text-xs font-bold tracking-widest uppercase mb-4"
+                  style={{ color: '#38BDF8' }}
+                >
+                  {member.role}
+                </p>
+                <h3 className="text-white font-bold font-display text-3xl md:text-4xl mb-5 leading-tight">
+                  {member.name}
+                </h3>
+                <p className="text-slate-400 text-base leading-relaxed max-w-lg">
+                  {member.bio}
+                </p>
+              </div>
             </div>
-          </div>
-        ))}
-      </motion.div>
+          ))}
+        </motion.div>
+      </div>
 
-      {/* Dots */}
-      <div className="flex justify-center gap-2 mt-6">
-        {teamMembers.map((_, i) => (
+      {/* Nav arrows */}
+      <div className="flex items-center justify-between px-4 sm:px-6 lg:px-8 mt-5">
+        {/* Dots */}
+        <div className="flex gap-2">
+          {teamMembers.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => goTo(i + 1)}
+              aria-label={`Ir al miembro ${i + 1}`}
+              className="h-1.5 rounded-full transition-all duration-300 cursor-pointer"
+              style={{
+                width: i === realIndex ? '24px' : '8px',
+                background: i === realIndex ? '#38BDF8' : 'rgba(255,255,255,0.15)',
+              }}
+            />
+          ))}
+        </div>
+
+        {/* Arrow buttons */}
+        <div className="flex gap-2">
           <button
-            key={i}
-            onClick={() => goTo(i + 1)}
-            className={`h-2 rounded-full transition-all duration-300 ${
-              i === realIndex
-                ? 'bg-cyan-400 w-6'
-                : 'bg-slate-600 hover:bg-slate-400 w-2'
-            }`}
-          />
-        ))}
+            onClick={prev}
+            aria-label="Anterior"
+            className="w-10 h-10 rounded-xl flex items-center justify-center text-slate-400 hover:text-white transition-all duration-200 cursor-pointer hover:scale-105"
+            style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+          <button
+            onClick={next}
+            aria-label="Siguiente"
+            className="w-10 h-10 rounded-xl flex items-center justify-center text-slate-400 hover:text-white transition-all duration-200 cursor-pointer hover:scale-105"
+            style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
+        </div>
       </div>
     </div>
   )
